@@ -9,6 +9,7 @@ public class Bomb: MonoBehaviour
 
     public GameObject explosionPrefab;
     public LayerMask levelMask;
+    public LayerMask weakWallsMask;
 
     private IEnumerator CreateExplosions(Vector3 direction)
     {
@@ -23,11 +24,19 @@ public class Bomb: MonoBehaviour
             }
             else
             {
+                if(hit.collider.gameObject.transform.parent.tag == "WeakBlock")
+                    destroyWall(hit.collider.gameObject);
                 break;
             }
 
             yield return new WaitForSeconds(.05f);
         }
+    }
+
+    void destroyWall(GameObject hitObj)
+    {
+        Debug.Log("Destroying: " + hitObj.ToString());
+        Destroy(hitObj);
     }
 
 
