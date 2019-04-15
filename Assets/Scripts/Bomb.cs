@@ -10,6 +10,7 @@ public class Bomb: MonoBehaviour
     public GameObject explosionPrefab;
     public LayerMask levelMask;
     public LayerMask weakWallsMask;
+    public Destructible crateScript;
 
     private IEnumerator CreateExplosions(Vector3 direction)
     {
@@ -24,8 +25,13 @@ public class Bomb: MonoBehaviour
             }
             else
             {
+                Debug.Log(hit.collider.gameObject.transform.parent.tag);
                 if(hit.collider.gameObject.transform.parent.tag == "WeakBlock")
-                    destroyWall(hit.collider.gameObject);
+                {
+                    Debug.Log("not yet");
+                    Destructible crate = (Destructible) hit.collider.gameObject.GetComponent(typeof(Destructible));
+                    crate.Collapse();
+                }
                 break;
             }
 
