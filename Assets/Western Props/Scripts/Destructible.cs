@@ -15,7 +15,6 @@ public class Destructible : MonoBehaviour {
 	// If the player clicks on the object
 	public void Collapse ()
 	{
-                Debug.Log("Collapse called!");
 		// Spawn a shattered object
 		Instantiate(destroyedVersion, transform.position, transform.rotation);
 		// Remove the current object
