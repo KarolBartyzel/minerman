@@ -16,9 +16,10 @@ public class Destructible : MonoBehaviour {
 	public void Collapse ()
 	{
 		// Spawn a shattered object
-		Instantiate(destroyedVersion, transform.position, transform.rotation);
+		GameObject destroyed = Instantiate(destroyedVersion, transform.position, transform.rotation);
 		// Remove the current object
 		Destroy(gameObject);
+		Destroy(destroyed, 3F);
 	}
 
 }
