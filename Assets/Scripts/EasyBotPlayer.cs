@@ -17,7 +17,6 @@ public class EasyBotPlayer: BasePlayer {
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log(rigidBody.velocity.magnitude);
  
         if (col.gameObject.layer == PLAYER_LAYER)
         {
