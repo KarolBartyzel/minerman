@@ -3,9 +3,22 @@ using System.Collections;
 using System;
 
 public class HumanPlayer: BasePlayer {
+    private LoadSceneOnClick loadSceneOnClick;
+
+    void Start()
+    {
+        base.Start();
+        this.loadSceneOnClick = GetComponent<LoadSceneOnClick>();
+    }
+
     override protected void UpdateMovement()
     {
         animator.SetBool("Walking", false);
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            this.loadSceneOnClick.LoadByIndex(0);
+        }
 
         if (Input.GetKey(KeyCode.W))
         {

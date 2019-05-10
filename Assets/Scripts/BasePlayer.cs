@@ -59,7 +59,7 @@ public class BasePlayer: MonoBehaviour {
         }
     }
 
-    void Start()
+    protected void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
