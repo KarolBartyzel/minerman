@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class HumanPlayer: BasePlayer {
     protected override void Init()
     {
-        Debug.Log("INIT");
         playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
     }
 
