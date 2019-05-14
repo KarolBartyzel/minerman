@@ -4,15 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public class BasePlayer: MonoBehaviour {
+public abstract class BasePlayer: MonoBehaviour {
     private static readonly int MAX_BOMBS = 2;
     protected Rigidbody rigidBody;
     protected Transform myTransform;
     protected Animator animator;
     public GlobalStateManager globalManager;
 
-    [Range (1, 4)]
-    public int playerNumber = 1;
+    public int playerId;
 
     public float moveSpeed = 5f;
     public bool canDropBombs = true;
@@ -21,7 +20,8 @@ public class BasePlayer: MonoBehaviour {
     public GameObject bombPrefab;
     private IList<GameObject> bombs = new List<GameObject>();
 
-    protected virtual void UpdateMovement() {}
+    protected abstract void UpdateMovement();
+    protected abstract void Init();
 
     protected void moveUp() {
         rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, moveSpeed);
@@ -64,11 +64,15 @@ public class BasePlayer: MonoBehaviour {
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
         animator = myTransform.Find("PlayerModel").GetComponent<Animator>();
+        Init();
     }
 
     void Update()
     {
-        UpdateMovement();
+        if (!PauseMenu.GameIsPaused)
+        {
+            UpdateMovement();
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -76,7 +80,7 @@ public class BasePlayer: MonoBehaviour {
         if (other.CompareTag("Explosion"))
         {
             dead = true;
-            globalManager.PlayerDied(playerNumber);
+            globalManager.PlayerDied(playerId);
             Destroy(gameObject);
         }
     }

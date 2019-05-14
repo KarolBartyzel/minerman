@@ -1,40 +1,54 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System;
+using System.IO;
+using Newtonsoft.Json;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public static class GlobalState
+{
+    public static string gameResult { get; set; }
+    public static string playerName { get; set; }
+}
 
 public class GlobalStateManager: MonoBehaviour
 {
-    private IList<int> deadPlayers = new List<int>();
+    private IList<PlayerStatus> players = new List<PlayerStatus>();
+    public GameObject resultMenuUI;
+    public ResultMenu resultMenu;
 
-    public void PlayerDied(int playerNumber)
+    public int AddPlayer(string name = "", bool isHuman = false)
     {
-        deadPlayers.Add(playerNumber);
-
-        if (deadPlayers.Count >= 2) 
-        {
-            Invoke("CheckPlayersDeath", .3f);
-        }  
+        PlayerStatus newPlayer = new PlayerStatus(name, isHuman);
+        players.Add(newPlayer);
+        return newPlayer.id;
     }
 
-    void CheckPlayersDeath() 
+    public void PlayerDied(int playerId)
     {
-        if (!deadPlayers.Contains(1)) {
-            Debug.Log("Player 1 is the winner!");
-        }
-        else if (!deadPlayers.Contains(2)) {
-            Debug.Log("Player 2 is the winner!");
-        }
-        else if (!deadPlayers.Contains(3)) {
-            Debug.Log("Player 3 is the winner!");
-        }
-        // else if (!deadPlayers.Contains(4)) {
-        //     Debug.Log("Player 4 is the winner!");
-        // }
-        else 
-        {
-            Debug.Log("The game ended in a draw!");
-        }
+        PlayerStatus deadPlayer = players.Single(player => player.id == playerId);
+        deadPlayer.health = 0;
 
-        Application.Quit();
-    } 
+        IEnumerable<PlayerStatus> alivePlayers = players.Where(player => player.health > 0);
+
+        int countOfAlivePlayers = alivePlayers.Count();
+        if (countOfAlivePlayers <= 1)
+        {
+            PlayerStatus winner = alivePlayers.SingleOrDefault();
+            PlayerStatus humanPlayer = players.Single(player => player.isHuman);
+
+            GlobalState.gameResult = winner != null ? winner.name + " won!" : "Game ended in a draw!";
+            ScoreManager.AddResult(new GameResult()
+            {
+                playerName = humanPlayer.name,
+                points = humanPlayer.points,
+                status = winner == null ? "draw" : winner.name == humanPlayer.name ? "Win" : "Loss"
+            });
+
+            resultMenu.GoToResults();
+        }
+    }
 }

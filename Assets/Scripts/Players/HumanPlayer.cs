@@ -1,24 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.SceneManagement;
 
 public class HumanPlayer: BasePlayer {
-    private LoadSceneOnClick loadSceneOnClick;
-
-    void Start()
+    protected override void Init()
     {
-        base.Start();
-        this.loadSceneOnClick = GetComponent<LoadSceneOnClick>();
+        playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
     }
 
     override protected void UpdateMovement()
     {
         animator.SetBool("Walking", false);
-
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            this.loadSceneOnClick.LoadByIndex(0);
-        }
 
         if (Input.GetKey(KeyCode.W))
         {
