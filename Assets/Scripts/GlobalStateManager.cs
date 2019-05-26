@@ -10,7 +10,6 @@ using UnityEngine.SceneManagement;
 
 public static class GlobalState
 {
-    public static string gameResult { get; set; }
     public static string playerName { get; set; }
 }
 
@@ -27,28 +26,54 @@ public class GlobalStateManager: MonoBehaviour
         return newPlayer.id;
     }
 
+    private void SaveInfoForPlayer(PlayerStatus player, String status)
+    {
+        ScoreManager.AddResult(new GameResult()
+        {
+            playerName = player.name,
+            points = player.points,
+            status = status
+        });
+    }
+
     public void PlayerDied(int playerId)
     {
         PlayerStatus deadPlayer = players.Single(player => player.id == playerId);
         deadPlayer.health = 0;
 
+        IEnumerable<PlayerStatus> deadHumanPlayers = players.Where(player => player.health == 0 && player.isHuman);
         IEnumerable<PlayerStatus> alivePlayers = players.Where(player => player.health > 0);
+        IEnumerable<PlayerStatus> aliveHumanPlayers = alivePlayers.Where(player => player.isHuman);
 
-        int countOfAlivePlayers = alivePlayers.Count();
-        if (countOfAlivePlayers <= 1)
+        if (alivePlayers.Count() == 0)
         {
-            PlayerStatus winner = alivePlayers.SingleOrDefault();
-            PlayerStatus humanPlayer = players.Single(player => player.isHuman);
-
-            GlobalState.gameResult = winner != null ? winner.name + " won!" : "Game ended in a draw!";
-            ScoreManager.AddResult(new GameResult()
+            // Draw
+            foreach(PlayerStatus player in deadHumanPlayers)
             {
-                playerName = humanPlayer.name,
-                points = humanPlayer.points,
-                status = winner == null ? "draw" : winner.name == humanPlayer.name ? "Win" : "Loss"
-            });
-
-            resultMenu.GoToResults();
+                SaveInfoForPlayer(player, "draw");
+            }
+            resultMenu.GoToResults("draw");
+            
+        }
+        else if (aliveHumanPlayers.Count() == 0)
+        {
+            // Loss
+            foreach(PlayerStatus player in deadHumanPlayers)
+            {
+                SaveInfoForPlayer(player, "loss");
+            }
+            resultMenu.GoToResults("loss");
+        }
+        else if (alivePlayers.Count() == 1)
+        {
+            // Win
+            foreach(PlayerStatus player in deadHumanPlayers)
+            {
+                SaveInfoForPlayer(player, "loss");
+            }
+            PlayerStatus winner = alivePlayers.Single();
+            SaveInfoForPlayer(winner, "win");
+            resultMenu.GoToResults(winner.name);
         }
     }
 }

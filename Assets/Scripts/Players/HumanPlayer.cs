@@ -7,6 +7,7 @@ public class HumanPlayer: BasePlayer {
     protected override void Init()
     {
         playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
+        hasLight = true;
     }
 
     override protected void UpdateMovement()
