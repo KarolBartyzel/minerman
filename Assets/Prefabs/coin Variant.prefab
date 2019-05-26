@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &9213686022531290269
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8046539622116674362}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.05, y: 0.05, z: 0.05}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2056679437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23,7 +36,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 69e570a331da80d4f9bb60a69b974919, type: 3}
       propertyPath: m_Name
-      value: coin
+      value: coin Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 69e570a331da80d4f9bb60a69b974919, type: 3}
+      propertyPath: m_TagString
+      value: Coin
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 69e570a331da80d4f9bb60a69b974919, type: 3}
+      propertyPath: m_TagString
+      value: PickUp
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 69e570a331da80d4f9bb60a69b974919, type: 3}
       propertyPath: m_LocalPosition.x

@@ -25,6 +25,9 @@ public abstract class BasePlayer: MonoBehaviour {
     protected abstract void UpdateMovement();
     protected abstract void Init();
 
+    // Collectables
+    protected int coins = 0;
+
     protected void moveUp() {
         rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, moveSpeed);
         myTransform.rotation = Quaternion.Euler(0, 0, 0);
@@ -70,7 +73,7 @@ public abstract class BasePlayer: MonoBehaviour {
         light.SetActive(hasLight);
     }
 
-    void Update()
+    protected void Update()
     {
         if (!PauseMenu.GameIsPaused)
         {
@@ -80,11 +83,35 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("layer is: " + other.gameObject.layer);
+        Debug.Log("tag is: " + other.gameObject.tag);
         if (other.CompareTag("Explosion"))
         {
             dead = true;
             globalManager.PlayerDied(playerId);
             Destroy(gameObject);
+        }
+        if (isCollectable(other.gameObject))
+        { 
+            other.gameObject.SetActive(false);
+            HandleSpecificCollectable(other.gameObject);
+        }
+    }
+    
+    // TODO use some Unity mechanism to distunguish this
+    // layers?
+    // And create seperate classes for those
+    private bool isCollectable(GameObject obj)
+    {
+        return obj.CompareTag("Coin");
+    }
+
+    private void HandleSpecificCollectable(GameObject collectable)
+    {
+        if (collectable.CompareTag("Coin"))
+        {
+            this.coins += 1;
+            Debug.Log("Currently has coins: " + this.coins);
         }
     }
 }
