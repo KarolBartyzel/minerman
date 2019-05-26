@@ -16,8 +16,10 @@ public abstract class BasePlayer: MonoBehaviour {
     public float moveSpeed = 5f;
     public bool canDropBombs = true;
     public bool dead = false;
+    public bool hasLight = false;
 
     public GameObject bombPrefab;
+    public GameObject light;
     private IList<GameObject> bombs = new List<GameObject>();
 
     protected abstract void UpdateMovement();
@@ -61,10 +63,11 @@ public abstract class BasePlayer: MonoBehaviour {
 
     protected void Start()
     {
+        Init();
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
         animator = myTransform.Find("PlayerModel").GetComponent<Animator>();
-        Init();
+        light.SetActive(hasLight);
     }
 
     void Update()
