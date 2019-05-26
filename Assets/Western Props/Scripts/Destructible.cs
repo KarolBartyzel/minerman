@@ -10,16 +10,31 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour {
 
+	public double coinProbability = 0.7;
+
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
+
+	public GameObject CoinObj;
 
 	// If the player clicks on the object
 	public void Collapse ()
 	{
+		CreateRandomCollectable();
 		// Spawn a shattered object
 		GameObject destroyed = Instantiate(destroyedVersion, transform.position, transform.rotation);
 		// Remove the current object
 		Destroy(gameObject);
 		Destroy(destroyed, 3F);
+	}
+
+	public void CreateRandomCollectable()
+	{
+		System.Random rand = new System.Random();
+		if(rand.NextDouble() <= coinProbability)
+		{
+			GameObject coin = Instantiate(CoinObj, transform.position + Vector3.up, transform.rotation);
+
+		}
 	}
 
 }

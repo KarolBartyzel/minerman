@@ -7,6 +7,8 @@ TagManager:
   - Explosion
   - Block
   - WeakBlock
+  - Coin
+  - PickUp
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - 
   - 
   - Blocks
-  - 
+  - Collectable
   - 
   - 
   - 
