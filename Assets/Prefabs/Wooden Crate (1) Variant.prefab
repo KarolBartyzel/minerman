@@ -26,9 +26,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinProbability: 1
+  shieldProbability: 0.7
   destroyedVersion: {fileID: 1168907351885854, guid: b3dc6d5c1ab8158418b2f82094975753,
     type: 3}
   CoinObj: {fileID: 8046539622116674362, guid: 1b2a810c5421c8443ba5fa91fe44859d, type: 3}
+  shieldObj: {fileID: 7916188770872322314, guid: c37fbaa55e8d57148b4e622d6b768ff4,
+    type: 3}
 --- !u!1001 &120846540435873760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38,7 +41,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1000011275823026, guid: c4fa03dde2a5a52439028e5fba052e5c, type: 3}
       propertyPath: m_Name
-      value: Wooden Crate (1)
+      value: Wooden Crate (1) Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1000011275823026, guid: c4fa03dde2a5a52439028e5fba052e5c, type: 3}
       propertyPath: m_Layer
@@ -46,15 +49,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000011311866092, guid: c4fa03dde2a5a52439028e5fba052e5c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.97
+      value: 2.000086
       objectReference: {fileID: 0}
     - target: {fileID: 4000011311866092, guid: c4fa03dde2a5a52439028e5fba052e5c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0011902263
       objectReference: {fileID: 0}
     - target: {fileID: 4000011311866092, guid: c4fa03dde2a5a52439028e5fba052e5c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.9399
+      value: 4.99
       objectReference: {fileID: 0}
     - target: {fileID: 4000011311866092, guid: c4fa03dde2a5a52439028e5fba052e5c, type: 3}
       propertyPath: m_LocalRotation.x

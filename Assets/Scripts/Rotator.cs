@@ -19,7 +19,7 @@ public class Rotator : MonoBehaviour
     {
         Vector3 rotationVec;
         if(inXAxis)
-            rotationVec = new Vector3(0, 0, speed);
+            rotationVec = new Vector3(0, speed, 0);
         else
             rotationVec = new Vector3(speed, 2 * speed, 3 * speed);
         transform.Rotate(rotationVec * Time.deltaTime);

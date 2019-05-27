@@ -7,8 +7,11 @@ using UnityEngine.UI;
 public class HumanPlayer: BasePlayer {
 
     public Text coinsText;
+    public Image shieldImg;
+
     protected override void Init()
     {
+        this.shieldImg.enabled = false;
         playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
         hasLight = true;
     }
@@ -16,6 +19,7 @@ public class HumanPlayer: BasePlayer {
     protected override void UpdateCollectables()
     {
         coinsText.text = "Coins: " + base.coins;
+        this.shieldImg.enabled = base.hasShield;
     }
 
     override protected void UpdateMovement()
