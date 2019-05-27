@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 
 public abstract class BasePlayer: MonoBehaviour {
     private static readonly int MAX_BOMBS = 2;
@@ -28,6 +29,7 @@ public abstract class BasePlayer: MonoBehaviour {
 
     // Collectables
     protected int coins = 0;
+    protected bool hasShield = false;
 
     protected void moveUp() {
         rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, moveSpeed);
@@ -85,17 +87,21 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("layer is: " + other.gameObject.layer);
-        Debug.Log("tag is: " + other.gameObject.tag);
         if (other.CompareTag("Explosion"))
         {
-            dead = true;
-            globalManager.PlayerDied(playerId);
-            Destroy(gameObject);
+            if(hasShield)
+            {
+                disableShield();
+            }
+            else
+            {
+                dead = true;
+                globalManager.PlayerDied(playerId);
+                Destroy(gameObject);
+            }
         }
         if (isCollectable(other.gameObject))
         { 
-            other.gameObject.SetActive(false);
             HandleSpecificCollectable(other.gameObject);
         }
     }
@@ -105,7 +111,7 @@ public abstract class BasePlayer: MonoBehaviour {
     // And create seperate classes for those
     private bool isCollectable(GameObject obj)
     {
-        return obj.CompareTag("Coin");
+        return obj.CompareTag("Coin") || obj.CompareTag("Shield");
     }
 
     private void HandleSpecificCollectable(GameObject collectable)
@@ -114,6 +120,23 @@ public abstract class BasePlayer: MonoBehaviour {
         {
             this.coins += 1;
             Debug.Log("Currently has coins: " + this.coins);
+            collectable.SetActive(false);
         }
+        if (collectable.CompareTag("Shield") && !hasShield)
+        {
+            Debug.Log("Shield acquired");
+            enableShield();
+            collectable.SetActive(false);
+        }
+    }
+
+    private void enableShield()
+    {
+        this.hasShield = true;
+    }
+
+    private void disableShield()
+    {
+        this.hasShield = false;
     }
 }
