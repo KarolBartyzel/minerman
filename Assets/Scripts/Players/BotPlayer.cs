@@ -15,6 +15,8 @@ public class BotPlayer: BasePlayer {
         playerId = globalManager.AddPlayer();
     }
 
+    protected override void UpdateCollectables(){}
+
     protected void makeStep() 
     {
         step = (step + direction + 4) % 4;

@@ -13,11 +13,9 @@ public class HumanPlayer: BasePlayer {
         hasLight = true;
     }
 
-    void Update()
+    protected override void UpdateCollectables()
     {
-        base.Update();
-        String coinsCount = new String('I', base.coins);
-        coinsText.text = "Coins: " + coinsCount;
+        coinsText.text = "Coins: " + base.coins;
     }
 
     override protected void UpdateMovement()

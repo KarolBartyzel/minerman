@@ -23,6 +23,7 @@ public abstract class BasePlayer: MonoBehaviour {
     private IList<GameObject> bombs = new List<GameObject>();
 
     protected abstract void UpdateMovement();
+    protected abstract void UpdateCollectables();
     protected abstract void Init();
 
     // Collectables
@@ -78,6 +79,7 @@ public abstract class BasePlayer: MonoBehaviour {
         if (!PauseMenu.GameIsPaused)
         {
             UpdateMovement();
+            UpdateCollectables();
         }
     }
 
