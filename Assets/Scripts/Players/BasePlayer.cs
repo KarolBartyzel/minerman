@@ -87,26 +87,25 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Explosion") && !hasShield)
+        if (other.CompareTag("Explosion"))
         {
-            dead = true;
-            globalManager.PlayerDied(playerId);
-            Destroy(gameObject);
+            if(!hasShield)
+            {
+                dead = true;
+                globalManager.PlayerDied(playerId);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Invoke("disableShield", 0.5f);
+            }
         }
         if (isCollectable(other.gameObject))
         { 
             HandleSpecificCollectable(other.gameObject);
         }
     }
-
-    public void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Explosion"))
-        {
-            disableShield();
-        }
-    }
-    
+   
     // TODO use some Unity mechanism to distunguish this
     // layers?
     // And create seperate classes for those
