@@ -11,10 +11,12 @@ using UnityEngine;
 public class Destructible : MonoBehaviour {
 
 	public double coinProbability = 0.7;
+	public double shieldProbability = 0.7;
 
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
 
 	public GameObject CoinObj;
+	public GameObject shieldObj;
 
 	// If the player clicks on the object
 	public void Collapse ()
@@ -32,8 +34,12 @@ public class Destructible : MonoBehaviour {
 		System.Random rand = new System.Random();
 		if(rand.NextDouble() <= coinProbability)
 		{
-			GameObject coin = Instantiate(CoinObj, transform.position + Vector3.up, transform.rotation);
+			Instantiate(CoinObj, transform.position + Vector3.up, transform.rotation);
 
+		}
+		if(rand.NextDouble() <= shieldProbability)
+		{
+			Instantiate(shieldObj, transform.position + Vector3.up, transform.rotation);
 		}
 	}
 
