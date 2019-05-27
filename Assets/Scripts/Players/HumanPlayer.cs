@@ -8,6 +8,7 @@ public class HumanPlayer: BasePlayer {
 
     public Text coinsText;
     public Image shieldImg;
+
     protected override void Init()
     {
         this.shieldImg.enabled = false;
