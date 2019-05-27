@@ -87,22 +87,23 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Explosion"))
+        if (other.CompareTag("Explosion") && !hasShield)
         {
-            if(hasShield)
-            {
-                disableShield();
-            }
-            else
-            {
-                dead = true;
-                globalManager.PlayerDied(playerId);
-                Destroy(gameObject);
-            }
+            dead = true;
+            globalManager.PlayerDied(playerId);
+            Destroy(gameObject);
         }
         if (isCollectable(other.gameObject))
         { 
             HandleSpecificCollectable(other.gameObject);
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Explosion"))
+        {
+            disableShield();
         }
     }
     
