@@ -8,12 +8,16 @@ public class HumanPlayer: BasePlayer {
 
     public Text coinsText;
     public Image shieldImg;
+	public Image healthBarImg;
+	
+	public float HealthLevel;
 
     protected override void Init()
     {
         this.shieldImg.enabled = false;
         playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
         hasLight = true;
+		this.healthBarImg.fillAmount = base.healthRate;
     }
 
     protected override void UpdateCollectables()
@@ -50,5 +54,11 @@ public class HumanPlayer: BasePlayer {
         {
             DropBomb();
         }
+    }
+	
+	protected override void UpdateHealthRate()
+    {
+		base.UpdateHealthRate();
+		this.healthBarImg.fillAmount = base.healthRate;
     }
 }
