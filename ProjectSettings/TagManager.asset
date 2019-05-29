@@ -10,6 +10,7 @@ TagManager:
   - Coin
   - PickUp
   - Shield
+  - Potion
   layers:
   - Default
   - TransparentFX

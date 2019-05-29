@@ -13,11 +13,13 @@ public class Destructible : MonoBehaviour {
 
 	private Tuple<double, double> coinProbabilityThreshold = new Tuple<double, double>(0.0, 0.33);
 	private Tuple<double, double> shieldProbabilityThreshold =  new Tuple<double, double>(0.34, 0.66);
+	private Tuple<double, double> potionProbabilityThreshold =  new Tuple<double, double>(0.0, 1.0); // for testing
 
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
 
 	public GameObject CoinObj;
 	public GameObject shieldObj;
+	public GameObject potionObj;
 
 	// If the player clicks on the object
 	public void Collapse ()
@@ -34,6 +36,7 @@ public class Destructible : MonoBehaviour {
 	{
 		System.Random rand = new System.Random();
 		double drawn = rand.NextDouble();
+		// TODO make it a list of tuples xd
 		if(isInThreshold(drawn, coinProbabilityThreshold))
 		{
 			Instantiate(CoinObj, transform.position, transform.rotation);
@@ -41,6 +44,11 @@ public class Destructible : MonoBehaviour {
 		if(isInThreshold(drawn, shieldProbabilityThreshold))
 		{
 			Instantiate(shieldObj, transform.position, transform.rotation);
+		}
+		if(isInThreshold(drawn, potionProbabilityThreshold))
+		{
+			Debug.Log("ala");
+			Instantiate(potionObj, transform.position, transform.rotation);
 		}
 	}
 

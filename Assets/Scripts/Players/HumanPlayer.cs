@@ -24,6 +24,7 @@ public class HumanPlayer: BasePlayer {
     {
         coinsText.text = "Coins: " + base.coins;
         this.shieldImg.enabled = base.hasShield;
+		this.healthBarImg.fillAmount = base.healthRate;
     }
 
     override protected void UpdateMovement()

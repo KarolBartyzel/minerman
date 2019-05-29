@@ -109,6 +109,7 @@ public abstract class BasePlayer: MonoBehaviour {
         if (isCollectable(other.gameObject))
         { 
             HandleSpecificCollectable(other.gameObject);
+            other.gameObject.SetActive(false);
         }
     }
 	
@@ -122,7 +123,7 @@ public abstract class BasePlayer: MonoBehaviour {
     // And create seperate classes for those
     private bool isCollectable(GameObject obj)
     {
-        return obj.CompareTag("Coin") || obj.CompareTag("Shield");
+        return obj.CompareTag("Coin") || obj.CompareTag("Shield") || obj.CompareTag("Potion");
     }
 
     private void HandleSpecificCollectable(GameObject collectable)
@@ -130,12 +131,14 @@ public abstract class BasePlayer: MonoBehaviour {
         if (collectable.CompareTag("Coin"))
         {
             this.coins += 1;
-            collectable.SetActive(false);
         }
         if (collectable.CompareTag("Shield") && !hasShield)
         {
             enableShield();
-            collectable.SetActive(false);
+        }
+        if(collectable.CompareTag("Potion"))
+        {
+            healthRate = 1f;
         }
     }
 
