@@ -31,6 +31,8 @@ MonoBehaviour:
   shieldObj: {fileID: 7916188770872322314, guid: c37fbaa55e8d57148b4e622d6b768ff4,
     type: 3}
   potionObj: {fileID: 1999239547283070, guid: d027d4bce170c4abf8619a7d7980440e, type: 3}
+  speedPotionObj: {fileID: 1891390126468666, guid: d4368066c6a114efe9bcb98e6cb1486d,
+    type: 3}
 --- !u!1001 &120846540435873760
 PrefabInstance:
   m_ObjectHideFlags: 0

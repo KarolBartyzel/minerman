@@ -11,15 +11,17 @@ using System;
 
 public class Destructible : MonoBehaviour {
 
-	private Tuple<double, double> coinProbabilityThreshold = new Tuple<double, double>(0.0, 0.25);
-	private Tuple<double, double> shieldProbabilityThreshold =  new Tuple<double, double>(0.26, 0.5);
-	private Tuple<double, double> potionProbabilityThreshold =  new Tuple<double, double>(0.51, 0.75);
+	private Tuple<double, double> coinProbabilityThreshold = new Tuple<double, double>(0.0, 0.20);
+	private Tuple<double, double> shieldProbabilityThreshold =  new Tuple<double, double>(0.21, 0.4);
+	private Tuple<double, double> potionProbabilityThreshold =  new Tuple<double, double>(0.41, 0.6);
+	private Tuple<double, double> speedPotionProbabilityThreshold =  new Tuple<double, double>(0.61, 0.8);
 
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
 
 	public GameObject CoinObj;
 	public GameObject shieldObj;
 	public GameObject potionObj;
+	public GameObject speedPotionObj;
 
 	// If the player clicks on the object
 	public void Collapse ()
@@ -48,6 +50,10 @@ public class Destructible : MonoBehaviour {
 		if(isInThreshold(drawn, potionProbabilityThreshold))
 		{
 			Instantiate(potionObj, transform.position, transform.rotation);
+		}
+		if(isInThreshold(drawn, speedPotionProbabilityThreshold))
+		{
+			Instantiate(speedPotionObj, transform.position, transform.rotation);
 		}
 	}
 

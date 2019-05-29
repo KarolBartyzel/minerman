@@ -24,6 +24,9 @@ public abstract class BasePlayer: MonoBehaviour {
     public GameObject light;
     private IList<GameObject> bombs = new List<GameObject>();
 
+    private float speedup = 0f;
+    private float speedUpTime = 5f;
+
     protected abstract void UpdateMovement();
     protected abstract void UpdateCollectables();
     protected abstract void Init();
@@ -33,25 +36,25 @@ public abstract class BasePlayer: MonoBehaviour {
     protected bool hasShield = false;
 
     protected void moveUp() {
-        rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, moveSpeed);
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, moveSpeed + speedup);
         myTransform.rotation = Quaternion.Euler(0, 0, 0);
         animator.SetBool("Walking", true);
     }
 
     protected void moveRight() {
-        rigidBody.velocity = new Vector3(moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
+        rigidBody.velocity = new Vector3(moveSpeed + speedup, rigidBody.velocity.y, rigidBody.velocity.z);
         myTransform.rotation = Quaternion.Euler(0, 90, 0);
         animator.SetBool("Walking", true);
     }
 
     protected void moveDown() {
-        rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed);
+        rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed - speedup);
         myTransform.rotation = Quaternion.Euler(0, 180, 0);
         animator.SetBool("Walking", true);
     }
 
     protected void moveLeft() {
-        rigidBody.velocity = new Vector3(-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
+        rigidBody.velocity = new Vector3(-moveSpeed - speedup, rigidBody.velocity.y, rigidBody.velocity.z);
         myTransform.rotation = Quaternion.Euler(0, 270, 0);
         animator.SetBool("Walking", true);
     }
@@ -109,7 +112,6 @@ public abstract class BasePlayer: MonoBehaviour {
         if (isCollectable(other.gameObject))
         { 
             HandleSpecificCollectable(other.gameObject);
-            other.gameObject.SetActive(false);
         }
     }
 	
@@ -123,7 +125,7 @@ public abstract class BasePlayer: MonoBehaviour {
     // And create seperate classes for those
     private bool isCollectable(GameObject obj)
     {
-        return obj.CompareTag("Coin") || obj.CompareTag("Shield") || obj.CompareTag("Potion");
+        return obj.CompareTag("Coin") || obj.CompareTag("Shield") || obj.CompareTag("Health Potion") || obj.CompareTag("Speed Potion");
     }
 
     private void HandleSpecificCollectable(GameObject collectable)
@@ -131,15 +133,35 @@ public abstract class BasePlayer: MonoBehaviour {
         if (collectable.CompareTag("Coin"))
         {
             this.coins += 1;
+            collectable.SetActive(false);
         }
         if (collectable.CompareTag("Shield") && !hasShield)
         {
             enableShield();
+            collectable.SetActive(false);
         }
-        if(collectable.CompareTag("Potion"))
+        if(collectable.CompareTag("Health Potion") && healthRate < 1f)
         {
             healthRate = 1f;
+            collectable.SetActive(false);
         }
+        if(collectable.CompareTag("Speed Potion") && speedup < 0.01f) // TODO may Bubak save this floating point operation from erroring
+        {
+            speedUp();
+            Invoke("speedDown", speedUpTime);
+            collectable.SetActive(false);
+        }
+    }
+
+
+    private void speedUp()
+    {
+        speedup = 3f;
+    }
+    
+    private void speedDown()
+    {
+        speedup = 0f;
     }
 
     private void enableShield()
