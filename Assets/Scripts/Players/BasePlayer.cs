@@ -30,6 +30,11 @@ public abstract class BasePlayer: MonoBehaviour {
     protected abstract void UpdateMovement();
     protected abstract void UpdateCollectables();
     protected abstract void Init();
+    
+    
+    protected virtual void PlayCollectCoinAudio(){}
+    protected virtual void PlayCollectShieldAudio(){}
+    protected virtual void PlayCollectHealthPotionAudio(){}
 
     // Collectables
     protected int coins = 0;
@@ -133,16 +138,19 @@ public abstract class BasePlayer: MonoBehaviour {
         if (collectable.CompareTag("Coin"))
         {
             this.coins += 1;
+            PlayCollectCoinAudio();
             collectable.SetActive(false);
         }
         if (collectable.CompareTag("Shield") && !hasShield)
         {
             enableShield();
+            PlayCollectShieldAudio();
             collectable.SetActive(false);
         }
         if(collectable.CompareTag("Health Potion") && healthRate < 1f)
         {
             healthRate = 1f;
+            PlayCollectHealthPotionAudio();
             collectable.SetActive(false);
         }
         if(collectable.CompareTag("Speed Potion") && speedup < 0.01f) // TODO may Bubak save this floating point operation from erroring
