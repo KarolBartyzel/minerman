@@ -7,11 +7,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Destructible : MonoBehaviour {
 
-	public double coinProbability = 0.7;
-	public double shieldProbability = 0.7;
+	private Tuple<double, double> coinProbabilityThreshold = new Tuple<double, double>(0.0, 0.33);
+	private Tuple<double, double> shieldProbabilityThreshold =  new Tuple<double, double>(0.34, 0.66);
 
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
 
@@ -32,14 +33,20 @@ public class Destructible : MonoBehaviour {
 	public void CreateRandomCollectable()
 	{
 		System.Random rand = new System.Random();
-		if(rand.NextDouble() <= coinProbability)
+		double drawn = rand.NextDouble();
+		if(isInThreshold(drawn, coinProbabilityThreshold))
 		{
 			Instantiate(CoinObj, transform.position, transform.rotation);
 		}
-		if(rand.NextDouble() <= shieldProbability)
+		if(isInThreshold(drawn, shieldProbabilityThreshold))
 		{
 			Instantiate(shieldObj, transform.position, transform.rotation);
 		}
+	}
+
+	private bool isInThreshold(double val, Tuple<double, double> threshold)
+	{
+		return val > threshold.Item1 && val < threshold.Item2;
 	}
 
 }
