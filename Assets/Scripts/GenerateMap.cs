@@ -9,145 +9,81 @@ using Newtonsoft.Json;
 public class GenerateMap : MonoBehaviour
 {
     public GameObject players;
+
+    public GameObject hardWall;
+    public GameObject insideHardWall;
+    public GameObject weakWall;
+    public GameObject floor1;
+    public GameObject floor2;
+
     public GameObject outsideHardWalls;
     public GameObject insideHardWalls;
     public GameObject weakWalls;
 
-    private const int X = 10;
-    private const int Z = 9;
+    private const int SIZE = 12;
 
-    private bool[,] fields = new bool[X, Z];
+    private Vector3 basicTopLeftPosition = new Vector3(0, 0f, 10f) + new Vector3(0.5f, 0, 0.5f);
+    private Vector3 basicDownRightPosition = new Vector3(12.5f, 0f, -2.5f) + new Vector3(0.5f, 0, 0.5f);
 
-    void reshuffle(int[] numbers, System.Random rand)
+    private bool[,] fields = new bool[SIZE, SIZE];
+
+    private void InstantiateWithActivation(UnityEngine.Object obj, Vector3 position, Quaternion rotation)
     {
-        for (int t = 0; t < numbers.Length; t++ )
-        {
-            int tmp = numbers[t];
-            int r = rand.Next(t, numbers.Length);
-            numbers[t] = numbers[r];
-            numbers[r] = tmp;
-        }
+        var go = Instantiate(obj, position, rotation) as GameObject;
+        go.SetActive(true);
     }
 
-    private bool checkIfDownIndexFree(int x, int y, int len)
+    private void placeOutsideWalls()
     {
-        if (x + len >= X - 1)
+        for (var i = 0; i < 2 * SIZE + 2; i++)
         {
-            return false;
-        }
+            InstantiateWithActivation(hardWall, basicTopLeftPosition + new Vector3(0.25f + 0.5f * i, 0, -0.25f), Quaternion.identity);
+            InstantiateWithActivation(hardWall, basicDownRightPosition + new Vector3(0.25f -0.5f * i, 0, -0.25f), Quaternion.identity);
 
-        for (var i = x - 1; i <= x + len; i++)
-        {
-            for (var j = y - 1; j <= y + 1; j++)
+            if (i != 0 && i != 2 * SIZE + 1)
             {
-                if (fields[i, j])
-                {
-                    return false;
-                }
+                InstantiateWithActivation(hardWall, basicTopLeftPosition + new Vector3(0.25f , 0, -0.25f - 0.5f * i), Quaternion.identity);
+                InstantiateWithActivation(hardWall, basicDownRightPosition + new Vector3(0.25f, 0, -0.25f + 0.5f * i), Quaternion.identity);
             }
         }
-
-        return true;
     }
 
-    private bool checkIfRightIndexFree(int x, int y, int len)
+    private void placeFloor()
     {
-        if (y + len >= Z - 1)
+        for (var i = 0; i < Convert.ToInt32(SIZE / 3); i++)
         {
-            return false;
-        }
-
-        for (var i = x - 1; i <= x + 1; i++)
-        {
-            for (var j = y - 1; j <= y + len; j++)
+            for (var j = 0; j < Convert.ToInt32(SIZE / 3); j++)
             {
-                if (fields[i, j])
+                for (var k = 0; k < 3; k++)
                 {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    private Tuple<int, int>[] findNextFreeIndexes(int len)
-    {
-        var res = new Tuple<int, int>[len];
-
-        for (var i = 1; i < X - 1; i++)
-        {
-            for (var j = 1; j < Z - 1; j++)
-            {
-                if (checkIfDownIndexFree(i, j, len))
-                {
-                    for (var k = 0; k < len; k++)
+                    for (var l = 0; l < 3; l++)
                     {
-                        fields[i+k,j] = true;
-                        res[k] = new Tuple<int, int>(i+k, j);
+                        var floor = k == 1 && l == 1 
+                            ? ((i + j) % 2 == 0 ? floor1 : floor2)
+                            : ((i + j) % 2 == 0 ? floor2 : floor1);
+
+                        InstantiateWithActivation(floor, basicTopLeftPosition + new Vector3(1f, -1f, -1f) + new Vector3((3 * i + k), 0, -(3 * j + l)), Quaternion.identity);
                     }
-                    return res;
-                }
-                else if (checkIfRightIndexFree(i, j, len))
-                {
-                    for (var k = 0; k < len; k++)
-                    {
-                        fields[i,j+k] = true;
-                        res[k] = new Tuple<int, int>(i, j+k);
-                    }
-                    return res;
                 }
             }
-        }
-
-        return null;
-    }
-
-    private void placeInsideWalls(System.Random rand)
-    {
-        var lengths = new int[13]{3,3,2,2,2,2,1,1,1,1,1,1,1};
-        reshuffle(lengths, rand);
-        var res = new Tuple<int, int>[21];
-        var i = 0;
-
-        foreach (var len in lengths)
-        {
-            var indexes = findNextFreeIndexes(len);
-            for (var k = 0; k < len; k++)
-            {
-                res[i++] = indexes == null ? null : indexes[k];
-            }
-        }
-
-        var g = 0;
-        foreach (Transform wall in insideHardWalls.transform)
-        {
-            if (res[g] != null)
-            {
-                wall.position = new Vector3(res[g].Item1 + 1, 0.5f, res[g].Item2 - 1);
-            }
-            else
-            {
-                wall.gameObject.SetActive(false);
-            }
-            g++;
         }
     }
 
     void placeWeakWalls(System.Random rand)
     {
-        foreach (Transform wall in weakWalls.transform)
+        var countOfWeakWalls = rand.Next(5, 10);
+        for (var i = 0; i < countOfWeakWalls; i++)
         {
             int x, y;
             do
             {
-                x = rand.Next(0, X);
-                y = rand.Next(0, Z);
+                x = rand.Next(0, SIZE);
+                y = rand.Next(0, SIZE);
             }
-            while(fields[x, y]);
-            
+            while(!checkSquare1(x, y));
+
             fields[x, y] = true;
-            wall.position = new Vector3(x + 1, 0f, y - 1);
+            InstantiateWithActivation(weakWall, new Vector3(1.5f + x, 0f, -1.5f + y), Quaternion.identity);
         }
     }
 
@@ -156,20 +92,48 @@ public class GenerateMap : MonoBehaviour
         int x, y;
         do
         {
-            x = rand.Next(0, X);
-            y = rand.Next(0, Z);
+            x = rand.Next(0, SIZE);
+            y = rand.Next(0, SIZE);
         }
-        while(fields[x, y]);
+        while(!checkSquare1(x, y));
 
         fields[x, y] = true;
-        player.position = new Vector3(x + 1, 1.2f, y - 1);
+        player.position = new Vector3(1.5f + x, 0f, -1.5f + y);
+    }
+    
+    private void placeInsideWalls(System.Random rand)
+    {
+        var lengths = new int[9]{4,4,3,3,3,2,2,2,2};
+        reshuffle(lengths, rand);
+        var res = new Tuple<int, int>[25];
+        var i = 0;
+
+        foreach (var len in lengths)
+        {
+            var indexes = findNextFreeIndexes(len,rand);
+            for (var k = 0; k < len; k++)
+            {
+                res[i++] = indexes == null ? null : indexes[k];
+            }
+        }
+
+        var g = 0;
+        foreach (var r in res)
+        {
+            if (r != null)
+            {
+                InstantiateWithActivation(insideHardWall, new Vector3(1.5f + r.Item1, 0f, -1.5f + r.Item2), Quaternion.identity);
+                // fields[r.Item1, r.Item2] = true;
+            }
+        }
     }
 
     void Start()
     {
         var rand = new System.Random();
 
-        placeInsideWalls(rand);
+        placeOutsideWalls();
+        placeFloor();
         placeWeakWalls(rand);
 
         using (StreamReader streamReader = File.OpenText(Path.Combine(Application.persistentDataPath, "GameSettings.txt")))
@@ -185,5 +149,115 @@ public class GenerateMap : MonoBehaviour
                 }
             }
         }
+
+        placeInsideWalls(rand);
     }
+
+    void reshuffle(int[] numbers, System.Random rand)
+    {
+        for (int t = 0; t < numbers.Length; t++ )
+        {
+            int tmp = numbers[t];
+            int r = rand.Next(t, numbers.Length);
+            numbers[t] = numbers[r];
+            numbers[r] = tmp;
+        }
+    }
+
+    private bool checkSquare1(int x, int y)
+    {
+        if (x < 0 || x > SIZE - 1 || y < 0 || y > SIZE - 1)
+        {
+            return false;
+        }
+
+        if (x > 0)
+        {
+            if ((y > 0 && fields[x - 1, y - 1]) || fields[x - 1, y] || (y < SIZE - 1 && fields[x - 1, y + 1]))
+            {
+                return false;
+            }
+        }
+        if ((y > 0 && fields[x, y - 1]) || fields[x, y] || (y < SIZE - 1 && fields[x, y + 1]))
+        {
+            return false;
+        }
+        if (x < SIZE - 1)
+        {
+            if ((y > 0 && fields[x + 1, y - 1]) || fields[x + 1, y] || (y < SIZE - 1 && fields[x + 1, y + 1]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool checkSquare2(int x, int y)
+    {
+        if (x <= 0 || x >= SIZE - 1 || y <= 0 || y >= SIZE - 1)
+        {
+            return false;
+        }
+
+        if (x > 0)
+        {
+            if ((y > 0 && fields[x - 1, y - 1]) || fields[x - 1, y] || (y < SIZE - 1 && fields[x - 1, y + 1]))
+            {
+                return false;
+            }
+        }
+        if ((y > 0 && fields[x, y - 1]) || fields[x, y] || (y < SIZE - 1 && fields[x, y + 1]))
+        {
+            return false;
+        }
+        if (x < SIZE - 1)
+        {
+            if ((y > 0 && fields[x + 1, y - 1]) || fields[x + 1, y] || (y < SIZE - 1 && fields[x + 1, y + 1]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool checkDirection(int i, int j, int len, int ir, int jr, out Tuple<int, int>[] res)
+    {
+        res = new Tuple<int, int>[len];
+        for (var k = 0; k < len; k++)
+        {
+            if (!checkSquare2(i + ir * k, j + jr * k))
+            {
+                return false;
+            }
+        }
+        for (var k = 0; k < len; k++)
+        {
+            fields[i + ir * k, j + jr * k] = true;
+            res[k] = new Tuple<int, int>(i + ir * k, j + jr * k);
+        }
+
+        return true;
+    }
+
+    private Tuple<int, int>[] findNextFreeIndexes(int len, System.Random rand)
+    {
+        for (var i = 1; i < SIZE - 1; i++)
+        {
+            for (var j = 1; j < SIZE - 1; j++)
+            {
+                int ir, jr;
+                Tuple<int, int>[] res;
+
+                if (checkDirection(i, j, len, -1, 0, out res) || checkDirection(i, j, len, 1, 0, out res) || checkDirection(i, j, len, 0, -1, out res) || checkDirection(i, j, len, 0, 1, out res))
+                {
+                    return res;
+                }
+            }
+        }
+
+        return null;
+    }
+
 }

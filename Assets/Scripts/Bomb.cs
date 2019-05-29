@@ -14,10 +14,9 @@ public class Bomb: MonoBehaviour
 
     private IEnumerator CreateExplosions(Vector3 direction)
     {
-        for (int i = 1; i < 3; i++)
+        for (int i = 1; i < 5; i++)
         {
-            RaycastHit hit;
-            Physics.Raycast(transform.position + new Vector3(0, .5f, 0), direction, out hit, i, levelMask);
+            Physics.SphereCast(transform.position + new Vector3(0, 0.5f, 0), 0.1f, direction, out RaycastHit hit, i, levelMask);
 
             if (!hit.collider)
             {
@@ -25,7 +24,7 @@ public class Bomb: MonoBehaviour
             }
             else
             {
-                if(hit.collider.gameObject.transform.parent.tag == "WeakBlock")
+                if(hit.collider.gameObject.transform.tag == "WeakBlock")
                 {
                     Destructible crate = (Destructible) hit.collider.gameObject.GetComponent(typeof(Destructible));
                     crate.Collapse();
@@ -42,19 +41,14 @@ public class Bomb: MonoBehaviour
         Invoke("Explode", 3f);
     }
 
-    void Update()
-    {
-
-    }
-
     void Explode()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 
-        StartCoroutine(CreateExplosions(Vector3.forward));
-        StartCoroutine(CreateExplosions(Vector3.right));
-        StartCoroutine(CreateExplosions(Vector3.back));
-        StartCoroutine(CreateExplosions(Vector3.left));
+        StartCoroutine(CreateExplosions(Vector3.forward / 2.0f));
+        StartCoroutine(CreateExplosions(Vector3.right / 2.0f));
+        StartCoroutine(CreateExplosions(Vector3.back / 2.0f));
+        StartCoroutine(CreateExplosions(Vector3.left / 2.0f));
 
         GetComponent<MeshRenderer>().enabled = false;
         exploded = true;

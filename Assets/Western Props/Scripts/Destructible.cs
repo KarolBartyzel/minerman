@@ -34,12 +34,11 @@ public class Destructible : MonoBehaviour {
 		System.Random rand = new System.Random();
 		if(rand.NextDouble() <= coinProbability)
 		{
-			Instantiate(CoinObj, transform.position + Vector3.up, transform.rotation);
-
+			Instantiate(CoinObj, transform.position, transform.rotation);
 		}
 		if(rand.NextDouble() <= shieldProbability)
 		{
-			Instantiate(shieldObj, transform.position + Vector3.up, transform.rotation);
+			Instantiate(shieldObj, transform.position, transform.rotation);
 		}
 	}
 

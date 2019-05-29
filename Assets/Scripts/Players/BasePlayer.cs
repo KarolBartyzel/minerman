@@ -24,6 +24,8 @@ public abstract class BasePlayer: MonoBehaviour {
     public GameObject light;
     private IList<GameObject> bombs = new List<GameObject>();
 
+    private IList<GameObject> blocks = new List<GameObject>();
+
     protected abstract void UpdateMovement();
     protected abstract void UpdateCollectables();
     protected abstract void Init();
@@ -56,21 +58,39 @@ public abstract class BasePlayer: MonoBehaviour {
         animator.SetBool("Walking", true);
     }
 
+    // private Vector3 findClosestNotOccupied(float x, float y, float z)
+    // {
+    //     blocks.Where()
+    // }
+
     protected void DropBomb()
     {
         if (bombPrefab)
         {
             bombs = bombs.Where(bomb => bomb != null).ToList();
             if (bombs.Count() < MAX_BOMBS) {
-                GameObject bomb = Instantiate(bombPrefab, new Vector3(Mathf.RoundToInt(myTransform.position.x), bombPrefab.transform.position.y, Mathf.RoundToInt(myTransform.position.z)), bombPrefab.transform.rotation);
+                GameObject bomb = Instantiate(bombPrefab, new Vector3(Mathf.RoundToInt(myTransform.position.x) + 0.5f, bombPrefab.transform.position.y, Mathf.RoundToInt(myTransform.position.z) + 0.5f), bombPrefab.transform.rotation);
                 bombs.Add(bomb);
             }
         }
     }
 
+    // private void getAllWithinLayer()
+    // {
+    //     GameObject[] gos = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+    //     foreach(GameObject go in gos)
+    //     {
+    //         if(go.layer == "Blocks")
+    //         {
+    //             blocks.Add(go);
+    //         }
+    //     }
+    // }
+
     protected void Start()
     {
         Init();
+        // getAllWithinLayer();
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
         animator = myTransform.Find("PlayerModel").GetComponent<Animator>();
@@ -88,6 +108,7 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name);
         if (other.CompareTag("Explosion"))
         {
             if(!hasShield)
@@ -114,7 +135,6 @@ public abstract class BasePlayer: MonoBehaviour {
 	protected virtual void UpdateHealthRate()
     {
 		healthRate = healthRate <= 0.3f ? 0f : healthRate - 0.34f;
-		Debug.Log(healthRate);
     }
    
     // TODO use some Unity mechanism to distunguish this
@@ -130,12 +150,10 @@ public abstract class BasePlayer: MonoBehaviour {
         if (collectable.CompareTag("Coin"))
         {
             this.coins += 1;
-            Debug.Log("Currently has coins: " + this.coins);
             collectable.SetActive(false);
         }
         if (collectable.CompareTag("Shield") && !hasShield)
         {
-            Debug.Log("Shield acquired");
             enableShield();
             collectable.SetActive(false);
         }

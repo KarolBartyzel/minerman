@@ -42,7 +42,7 @@ public class BotPlayer: BasePlayer {
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.layer == PLAYER_LAYER)
+        if (col.gameObject.tag == "Player")
         {
             //place bomb, change direction and turn around
             DropBomb();
