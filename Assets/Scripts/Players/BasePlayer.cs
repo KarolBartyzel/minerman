@@ -112,7 +112,6 @@ public abstract class BasePlayer: MonoBehaviour {
         if (isCollectable(other.gameObject))
         { 
             HandleSpecificCollectable(other.gameObject);
-            other.gameObject.SetActive(false);
         }
     }
 	
@@ -134,19 +133,23 @@ public abstract class BasePlayer: MonoBehaviour {
         if (collectable.CompareTag("Coin"))
         {
             this.coins += 1;
+            collectable.SetActive(false);
         }
         if (collectable.CompareTag("Shield") && !hasShield)
         {
             enableShield();
+            collectable.SetActive(false);
         }
-        if(collectable.CompareTag("Health Potion"))
+        if(collectable.CompareTag("Health Potion") && healthRate < 1f)
         {
             healthRate = 1f;
+            collectable.SetActive(false);
         }
-        if(collectable.CompareTag("Speed Potion"))
+        if(collectable.CompareTag("Speed Potion") && speedup < 0.01f) // TODO may Bubak save this floating point operation from erroring
         {
             speedUp();
             Invoke("speedDown", speedUpTime);
+            collectable.SetActive(false);
         }
     }
 
