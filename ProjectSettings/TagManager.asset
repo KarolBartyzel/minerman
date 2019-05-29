@@ -11,6 +11,8 @@ TagManager:
   - PickUp
   - Shield
   - Potion
+  - Speed Potion
+  - Health Potion
   layers:
   - Default
   - TransparentFX
