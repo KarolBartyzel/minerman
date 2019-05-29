@@ -91,7 +91,6 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if (other.CompareTag("Explosion"))
         {
             if(!hasShield)

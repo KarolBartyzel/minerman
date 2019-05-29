@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HumanPlayer: BasePlayer {
-
     public Text coinsText;
     public Image shieldImg;
 	public Image healthBarImg;

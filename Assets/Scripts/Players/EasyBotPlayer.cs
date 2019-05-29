@@ -13,4 +13,9 @@ public class EasyBotPlayer: BotPlayer {
         animator.SetBool("Walking", false);
         move();
     }
+
+    override protected void NextStep()
+    {
+
+    }
 }
