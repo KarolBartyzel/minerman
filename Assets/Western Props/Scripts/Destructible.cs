@@ -11,9 +11,9 @@ using System;
 
 public class Destructible : MonoBehaviour {
 
-	private Tuple<double, double> coinProbabilityThreshold = new Tuple<double, double>(0.0, 0.33);
-	private Tuple<double, double> shieldProbabilityThreshold =  new Tuple<double, double>(0.34, 0.66);
-	private Tuple<double, double> potionProbabilityThreshold =  new Tuple<double, double>(0.0, 1.0); // for testing
+	private Tuple<double, double> coinProbabilityThreshold = new Tuple<double, double>(0.0, 0.25);
+	private Tuple<double, double> shieldProbabilityThreshold =  new Tuple<double, double>(0.26, 0.5);
+	private Tuple<double, double> potionProbabilityThreshold =  new Tuple<double, double>(0.51, 0.75);
 
 	public GameObject destroyedVersion;	// Reference to the shattered version of the object
 
@@ -47,7 +47,6 @@ public class Destructible : MonoBehaviour {
 		}
 		if(isInThreshold(drawn, potionProbabilityThreshold))
 		{
-			Debug.Log("ala");
 			Instantiate(potionObj, transform.position, transform.rotation);
 		}
 	}
