@@ -14,7 +14,7 @@ public class Bomb: MonoBehaviour
 
     private IEnumerator CreateExplosions(Vector3 direction)
     {
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < 3; i++)
         {
             Physics.SphereCast(transform.position + new Vector3(0, 0.5f, 0), 0.1f, direction, out RaycastHit hit, i, levelMask);
 
@@ -44,11 +44,11 @@ public class Bomb: MonoBehaviour
     void Explode()
     {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-
-        StartCoroutine(CreateExplosions(Vector3.forward / 2.0f));
-        StartCoroutine(CreateExplosions(Vector3.right / 2.0f));
-        StartCoroutine(CreateExplosions(Vector3.back / 2.0f));
-        StartCoroutine(CreateExplosions(Vector3.left / 2.0f));
+		
+		StartCoroutine(CreateExplosions(Vector3.forward));
+        StartCoroutine(CreateExplosions(Vector3.right));
+        StartCoroutine(CreateExplosions(Vector3.back));
+        StartCoroutine(CreateExplosions(Vector3.left));
 
         GetComponent<MeshRenderer>().enabled = false;
         exploded = true;
