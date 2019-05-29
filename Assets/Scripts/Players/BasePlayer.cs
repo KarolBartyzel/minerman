@@ -15,6 +15,7 @@ public abstract class BasePlayer: MonoBehaviour {
     public int playerId;
 
     public float moveSpeed = 5f;
+	public float healthRate = 1f;
     public bool canDropBombs = true;
     public bool dead = false;
     public bool hasLight = false;
@@ -91,9 +92,13 @@ public abstract class BasePlayer: MonoBehaviour {
         {
             if(!hasShield)
             {
-                dead = true;
-                globalManager.PlayerDied(playerId);
-                Destroy(gameObject);
+				UpdateHealthRate();
+				if(healthRate <= 0)
+				{
+					dead = true;
+					globalManager.PlayerDied(playerId);
+					Destroy(gameObject);
+				}
             }
             else
             {
@@ -104,6 +109,12 @@ public abstract class BasePlayer: MonoBehaviour {
         { 
             HandleSpecificCollectable(other.gameObject);
         }
+    }
+	
+	protected virtual void UpdateHealthRate()
+    {
+		healthRate = healthRate <= 0.3f ? 0f : healthRate - 0.34f;
+		Debug.Log(healthRate);
     }
    
     // TODO use some Unity mechanism to distunguish this
