@@ -9,16 +9,11 @@ using Newtonsoft.Json;
 public class GenerateMap : MonoBehaviour
 {
     public GameObject players;
-
     public GameObject hardWall;
     public GameObject insideHardWall;
     public GameObject weakWall;
     public GameObject floor1;
     public GameObject floor2;
-
-    public GameObject outsideHardWalls;
-    public GameObject insideHardWalls;
-    public GameObject weakWalls;
 
     private const int SIZE = 12;
 

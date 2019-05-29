@@ -1750,15 +1750,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599f3fa8f90f0324d81e1efb6eddf41c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalManager: {fileID: 0}
+  globalManager: {fileID: 1505589772}
   playerId: 0
   moveSpeed: 6
   healthRate: 1
   canDropBombs: 1
   dead: 0
   hasLight: 0
-  bombPrefab: {fileID: 0}
-  light: {fileID: 0}
+  bombPrefab: {fileID: 124052, guid: 6291891f72f724c4eae6be6052e78735, type: 3}
+  light: {fileID: 1554984243}
 --- !u!136 &928144890
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4558,9 +4558,6 @@ MonoBehaviour:
   weakWall: {fileID: 832931388}
   floor1: {fileID: 1108238986}
   floor2: {fileID: 221090911}
-  outsideHardWalls: {fileID: 0}
-  insideHardWalls: {fileID: 0}
-  weakWalls: {fileID: 0}
 --- !u!1001 &2040809061
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4716,7 +4713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &2045903301
 Light:
   m_ObjectHideFlags: 0
