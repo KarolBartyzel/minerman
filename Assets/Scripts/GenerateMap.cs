@@ -87,7 +87,7 @@ public class GenerateMap : MonoBehaviour
         }
     }
 
-    void placePlayer(System.Random rand, Transform player)
+    private Vector3 getPositionForPlayer(System.Random rand)
     {
         int x, y;
         do
@@ -98,7 +98,7 @@ public class GenerateMap : MonoBehaviour
         while(!checkSquare1(x, y));
 
         fields[x, y] = true;
-        player.position = new Vector3(1.5f + x, 0f, -1.5f + y);
+        return new Vector3(1.5f + x, 0f, -1.5f + y);
     }
     
     private void placeInsideWalls(System.Random rand)
@@ -123,7 +123,6 @@ public class GenerateMap : MonoBehaviour
             if (r != null)
             {
                 InstantiateWithActivation(insideHardWall, new Vector3(1.5f + r.Item1, 0f, -1.5f + r.Item2), Quaternion.identity);
-                // fields[r.Item1, r.Item2] = true;
             }
         }
     }
@@ -142,10 +141,17 @@ public class GenerateMap : MonoBehaviour
 
             foreach (Transform player in players.transform)
             {
-                if (player.name.StartsWith("Human") || (player.name.StartsWith("Bot") && player.name.Contains(gameSettings.level)))
+                if (player.name.StartsWith("Human"))
                 {
-                    player.gameObject.SetActive(true);
-                    placePlayer(rand, player);
+                    InstantiateWithActivation(player.gameObject, getPositionForPlayer(rand), Quaternion.identity);
+                }
+                if (player.name.StartsWith("Bot") && player.name.Contains(gameSettings.level))
+                {
+                    var botsCount = gameSettings.level == "Easy" ? 2 : gameSettings.level == "Medium" ? 3 : gameSettings.level == "Hard" ? 4 : 0;
+                    for (var i = 0; i < botsCount; i++)
+                    {
+                        InstantiateWithActivation(player.gameObject, getPositionForPlayer(rand), Quaternion.identity);
+                    }
                 }
             }
         }
