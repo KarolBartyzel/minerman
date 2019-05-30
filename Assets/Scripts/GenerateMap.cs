@@ -112,7 +112,6 @@ public class GenerateMap : MonoBehaviour
             }
         }
 
-        var g = 0;
         foreach (var r in res)
         {
             if (r != null)
@@ -248,7 +247,6 @@ public class GenerateMap : MonoBehaviour
         {
             for (var j = 1; j < SIZE - 1; j++)
             {
-                int ir, jr;
                 Tuple<int, int>[] res;
 
                 if (checkDirection(i, j, len, -1, 0, out res) || checkDirection(i, j, len, 1, 0, out res) || checkDirection(i, j, len, 0, -1, out res) || checkDirection(i, j, len, 0, 1, out res))

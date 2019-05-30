@@ -27,7 +27,7 @@ public class HardBotPlayer: BotPlayer {
 
     override protected void NextStep()
     {
-        if (otherPlayers.Exists(other => Mathf.Abs(Vector3.Distance(other.position, transform.position)) < 3f))
+        if (otherPlayers.Exists(other => Mathf.Abs(Vector3.Distance(other.position, transform.position)) < 2f))
         {
             DropBomb();
         }
