@@ -6,6 +6,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public static class GlobalState
@@ -17,6 +18,8 @@ public class GlobalStateManager: MonoBehaviour
 {
     private IList<PlayerStatus> players = new List<PlayerStatus>();
     public GameObject resultMenuUI;
+    public Text aliveBotsUI;
+
     public ResultMenu resultMenu;
 
     public int AddPlayer(string name = "", bool isHuman = false)
@@ -44,6 +47,8 @@ public class GlobalStateManager: MonoBehaviour
         IEnumerable<PlayerStatus> deadHumanPlayers = players.Where(player => player.health == 0 && player.isHuman);
         IEnumerable<PlayerStatus> alivePlayers = players.Where(player => player.health > 0);
         IEnumerable<PlayerStatus> aliveHumanPlayers = alivePlayers.Where(player => player.isHuman);
+
+        aliveBotsUI.text = String.Format("Enemies left: {0}", alivePlayers.Count() - aliveHumanPlayers.Count());
 
         if (alivePlayers.Count() == 0)
         {

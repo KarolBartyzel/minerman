@@ -4,8 +4,9 @@ using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class HumanPlayer: BasePlayer {
-
+public class HumanPlayer: BasePlayer
+{
+    public Text scoreLabelUI;
     public Text coinsText;
     public Image shieldImg;
 	public Image healthBarImg;
@@ -23,12 +24,12 @@ public class HumanPlayer: BasePlayer {
         playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
         hasLight = true;
 		this.healthBarImg.fillAmount = base.healthRate;
-        
     }
 
     protected override void UpdateCollectables()
     {
         coinsText.text = "Coins: " + base.coins;
+        scoreLabelUI.text = "Coins: " + base.coins;
         this.shieldImg.enabled = base.hasShield;
 		this.healthBarImg.fillAmount = base.healthRate;
     }

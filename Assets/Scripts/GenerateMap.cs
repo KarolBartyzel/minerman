@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ public class GenerateMap : MonoBehaviour
     public GameObject weakWall;
     public GameObject floor1;
     public GameObject floor2;
+    public Text aliveBotsUI;
 
     private const int SIZE = 12;
 
@@ -142,6 +144,7 @@ public class GenerateMap : MonoBehaviour
                 if (player.name.StartsWith("Bot") && player.name.Contains(gameSettings.level))
                 {
                     var botsCount = gameSettings.level == "Easy" ? 1 : gameSettings.level == "Medium" ? 2 : gameSettings.level == "Hard" ? 3 : 0;
+                    aliveBotsUI.text = String.Format("Enemies left: {0}", botsCount);
                     for (var i = 0; i < botsCount; i++)
                     {
                         InstantiateWithActivation(player.gameObject, getPositionForPlayer(rand), Quaternion.identity);
