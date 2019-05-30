@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class HumanPlayer: BasePlayer {
+
     public Text coinsText;
     public Image shieldImg;
 	public Image healthBarImg;
@@ -12,6 +13,7 @@ public class HumanPlayer: BasePlayer {
     public AudioSource coinAudio;
     public AudioSource shieldAudio;
     public AudioSource healthPotionAudio;
+    public AudioSource speedPotionAudio;
 	
 	public float HealthLevel;
 
@@ -81,5 +83,9 @@ public class HumanPlayer: BasePlayer {
     
     protected override void PlayCollectHealthPotionAudio(){
         this.healthPotionAudio.Play();
+    }
+    
+    protected override void PlayCollectSpeedPotionAudio(){
+        this.speedPotionAudio.Play();
     }
 }

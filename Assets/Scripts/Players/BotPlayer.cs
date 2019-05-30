@@ -6,6 +6,7 @@ using System.Threading;
 public abstract class BotPlayer: BasePlayer {
     protected static readonly int WALL_LAYER = 8;
     protected static readonly int PLAYER_LAYER = 9;
+    public AudioSource deadAudio;
 
     protected int direction = 1;
     protected int step = 3;
@@ -75,5 +76,10 @@ public abstract class BotPlayer: BasePlayer {
                 moveRight();
                 break;
         }
+    }
+    
+    protected virtual void PlayBotDeadAudio(){
+        //this.deadAudio.Play();
+        Debug.Log("DEAD");
     }
 }

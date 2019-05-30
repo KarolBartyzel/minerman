@@ -35,6 +35,8 @@ public abstract class BasePlayer: MonoBehaviour {
     protected virtual void PlayCollectCoinAudio(){}
     protected virtual void PlayCollectShieldAudio(){}
     protected virtual void PlayCollectHealthPotionAudio(){}
+    protected virtual void PlayCollectSpeedPotionAudio(){}
+    protected virtual void PlayBotDeadAudio(){}
 
     // Collectables
     protected int coins = 0;
@@ -96,6 +98,7 @@ public abstract class BasePlayer: MonoBehaviour {
 
     public void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name);
         if (other.CompareTag("Explosion"))
         {
             if(!hasShield)
@@ -104,6 +107,7 @@ public abstract class BasePlayer: MonoBehaviour {
 				if(healthRate <= 0)
 				{
 					dead = true;
+                    PlayBotDeadAudio();
 					globalManager.PlayerDied(playerId);
 					Destroy(gameObject);
 				}
@@ -154,6 +158,7 @@ public abstract class BasePlayer: MonoBehaviour {
         }
         if(collectable.CompareTag("Speed Potion") && speedup < 0.01f) // TODO may Bubak save this floating point operation from erroring
         {
+            PlayCollectSpeedPotionAudio();
             speedUp();
             Invoke("speedDown", speedUpTime);
             collectable.SetActive(false);
