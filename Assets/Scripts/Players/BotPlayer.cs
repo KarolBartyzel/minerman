@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Threading;
 
-public class BotPlayer: BasePlayer {
+public abstract class BotPlayer: BasePlayer {
     protected static readonly int WALL_LAYER = 8;
     protected static readonly int PLAYER_LAYER = 9;
 
@@ -47,16 +47,18 @@ public class BotPlayer: BasePlayer {
             //place bomb, change direction and turn around
             DropBomb();
             direction = (-1) * direction;
-            makeStep();
-            makeStep();
         }
     }
 
+    protected abstract void NextStep();
+
     override protected void UpdateMovement()
     {
-        if (rigidBody.velocity.magnitude < 1) {
+        if (rigidBody.velocity.magnitude < 2) {
             makeStep();
         }
+        
+        NextStep();
 
         animator.SetBool("Walking", false);
         switch(step) {

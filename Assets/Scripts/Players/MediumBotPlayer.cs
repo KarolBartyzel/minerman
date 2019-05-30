@@ -1,28 +1,17 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Threading;
 
 public class MediumBotPlayer: BotPlayer {
     private static readonly System.Random rnd = new System.Random();
 
-    override protected void UpdateMovement()
+    override protected void NextStep()
     {
-        if (rigidBody.velocity.magnitude < 1) {
-            makeStep();
-        }
-        animator.SetBool("Walking", false);
         var prob = rnd.Next(0, 1000);
-        if (prob < 3) {
-            makeStep();
-        }
-        else if (prob >= 3 && prob < 5) {
-            direction = (-1) * direction;
-        }
-        else if (prob >=5 && prob < 6) {
+        if (prob < 1) {
             DropBomb();
         }
-
-        move();
     }
 }

@@ -142,7 +142,7 @@ public class GenerateMap : MonoBehaviour
                 }
                 if (player.name.StartsWith("Bot") && player.name.Contains(gameSettings.level))
                 {
-                    var botsCount = gameSettings.level == "Easy" ? 2 : gameSettings.level == "Medium" ? 3 : gameSettings.level == "Hard" ? 4 : 0;
+                    var botsCount = gameSettings.level == "Easy" ? 1 : gameSettings.level == "Medium" ? 2 : gameSettings.level == "Hard" ? 3 : 0;
                     for (var i = 0; i < botsCount; i++)
                     {
                         InstantiateWithActivation(player.gameObject, getPositionForPlayer(rand), Quaternion.identity);
