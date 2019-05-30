@@ -8,6 +8,10 @@ public class HumanPlayer: BasePlayer {
     public Text coinsText;
     public Image shieldImg;
 	public Image healthBarImg;
+    public AudioSource damageAudio;
+    public AudioSource coinAudio;
+    public AudioSource shieldAudio;
+    public AudioSource healthPotionAudio;
 	
 	public float HealthLevel;
 
@@ -17,6 +21,7 @@ public class HumanPlayer: BasePlayer {
         playerId = globalManager.AddPlayer(string.IsNullOrEmpty(GlobalState.playerName) ? "Anonim" : GlobalState.playerName, true);
         hasLight = true;
 		this.healthBarImg.fillAmount = base.healthRate;
+        
     }
 
     protected override void UpdateCollectables()
@@ -58,7 +63,23 @@ public class HumanPlayer: BasePlayer {
 	
 	protected override void UpdateHealthRate()
     {
-		base.UpdateHealthRate();
+        base.UpdateHealthRate();
+        if(this.healthBarImg.fillAmount > base.healthRate)
+        {
+            this.damageAudio.Play();
+        }
 		this.healthBarImg.fillAmount = base.healthRate;
+    }
+    
+    protected override void PlayCollectCoinAudio(){
+        this.coinAudio.Play();
+    }
+    
+    protected override void PlayCollectShieldAudio(){
+        this.shieldAudio.Play();
+    }
+    
+    protected override void PlayCollectHealthPotionAudio(){
+        this.healthPotionAudio.Play();
     }
 }
